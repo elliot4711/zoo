@@ -1,0 +1,7 @@
+Format:name / hibernation / awake / feeding
+Bear / winter / 9-20 / 12
+Eagle / - / 18-06 / 20
+Sea lion / - / 6-18 / 14
+Seal / - / 6-18 / 14
+Wolf / - / 6-20 / 12
+Moose / - / 7-19 / 10
