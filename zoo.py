@@ -75,22 +75,22 @@ def animal_awake(dict, animal, time):
 
 def animal_not_hibernating(dict, animal, date):
     hibernation_season = dict[animal][0]
-    date = int(date)
+    month = date[1]
     winter = [12, 1, 2]
     summer = range(6, 9)
     autumn = range(9, 12)
     spring = range(3, 6)
     
-    if date in winter and hibernation_season == "winter":
+    if month in winter and hibernation_season == "winter":
         return False
     
-    elif date in summer and hibernation_season == "summer":
+    elif month in summer and hibernation_season == "summer":
         return False
         
-    elif date in autumn and hibernation_season == "autumn":
+    elif month in autumn and hibernation_season == "autumn":
         return False
 
-    elif date in spring and hibernation_season == "spring":
+    elif month in spring and hibernation_season == "spring":
         return False
     
     else: 
@@ -116,11 +116,13 @@ def visit_planner(dict):
     print("The zoo is open from 06-22")
     time = input("What time would you like to enter and leave the zoo? ")
     time = time.split("-")
-    print(time)
-
     time[0] = int(time[0])
     time[1] = int(time[1])
     print(time)
+
+    date = date.split("/")
+    date[0] = int(date[0])
+    date[1] = int(date[1])
 
     if time[0] > 22 or time[0] < 6:
        print("Sorry, the zoo is closed at this time")
