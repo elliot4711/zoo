@@ -133,7 +133,7 @@ def visit_planner(dict):
         animals = getList(dict)
         for animal in animals:
             if animal_awake(dict, animal, time) and animal_not_hibernating(dict, animal, date) and animal_feeding(dict, animal, time):
-                print(f"{animal}, the {animal} feeds at {dict[animal][3]}")
+                print(f"{animal} *** will be fed at {dict[animal][3]} ***")
             elif animal_awake(dict, animal, time) and animal_not_hibernating(dict, animal, date):
                 print(f"{animal}")
             else:
