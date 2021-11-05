@@ -52,15 +52,25 @@ def list_to_dict(list):
 
 
 def animal_awake(dict, animal, time):
+
     wakeup_time = dict[animal][1]
     sleep_time = dict[animal][2]
-
     if wakeup_time < sleep_time:
-        return time >= wakeup_time and time <= sleep_time
+        if time[0] >= wakeup_time and time[0] <= sleep_time:
+            return True
+        elif time[1] >= wakeup_time and time[1] <= sleep_time:
+            return True
+        else: 
+            return False
     
     else:
         #After midnight
-        return time >= wakeup_time or time <= sleep_time
+        if time[0] >= wakeup_time or time[0] <= sleep_time:
+            return True
+        elif time[1] >= wakeup_time or time[1] <= sleep_time:
+            return True
+        else: 
+            return False
 
 
 def animal_not_hibernating(dict, animal, date):
@@ -87,11 +97,12 @@ def animal_not_hibernating(dict, animal, date):
         return True
     
 
-def animal_feeding(dict, animal, time): 
+def animal_feeding(dict, animal, time):
+    time = range(time[0], time[1]) 
     feeding_time = dict[animal][3]
     if feeding_time == "-":
         return False
-    elif feeding_time == time: 
+    elif feeding_time in time: 
         return True
 
 
@@ -103,9 +114,15 @@ def getList(dict):
 def visit_planner(dict):
     date = input("What date would you like to visit the Stockholm zoo? ")
     print("The zoo is open from 06-22")
-    time = int(input("What time would you like to enter and leave the zoo? "))
+    time = input("What time would you like to enter and leave the zoo? ")
+    time = time.split("-")
+    print(time)
 
-    if time > 22 or time < 6:
+    time[0] = int(time[0])
+    time[1] = int(time[1])
+    print(time)
+
+    if time[0] > 22 or time[0] < 6:
        print("Sorry, the zoo is closed at this time")
     
     else: 
@@ -114,9 +131,9 @@ def visit_planner(dict):
         animals = getList(dict)
         for animal in animals:
             if animal_awake(dict, animal, time) and animal_not_hibernating(dict, animal, date) and animal_feeding(dict, animal, time):
-                print(f"You'll see {animal} during your visit, the {animal} feeds at {dict[animal][3]}")
+                print(f"{animal}, the {animal} feeds at {dict[animal][3]}")
             elif animal_awake(dict, animal, time) and animal_not_hibernating(dict, animal, date):
-                print(f"You'll see {animal} during your visit")
+                print(f"{animal}")
             else:
                 pass
 
