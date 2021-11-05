@@ -106,7 +106,7 @@ def animal_feeding(dict, animal, time):
         return True
 
 
-def getList(dict):
+def get_list(dict):
       
     return [*dict]
 
@@ -130,7 +130,7 @@ def visit_planner(dict):
     else: 
         print("The zoo is open")
         print("During your visit you will see:")
-        animals = getList(dict)
+        animals = get_list(dict)
         for animal in animals:
             if animal_awake(dict, animal, time) and animal_not_hibernating(dict, animal, date) and animal_feeding(dict, animal, time):
                 print(f"{animal} *** will be fed at {dict[animal][3]} ***")
