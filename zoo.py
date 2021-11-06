@@ -7,7 +7,7 @@ Written by Elliot Stjernqvist
 
 
 from os import read
-
+from pathlib import Path
 
 def read_file(file):
     """
@@ -224,7 +224,21 @@ def visit_planner(dict):
             else:
                 pass
 
-
+def create_poster(date, dict):
+    filename = Path("poster_for_{date}")
+    filename.touch(exist_ok=True)  # will create file, if it exists will do nothing
+    f = open(filename, "w")
+    f.write(f"Welcome to the Stockholm zoo!\nAt the zoo today {date} you can see\n")
+    date = date.split("/")
+    for i in range(2):
+        date[i] = int(date[i])
+    animals = get_key_list(dict)
+    for animal in animals:
+        if animal_not_hibernating(dict, animal, date):
+            f.write(f"{animal} *** will be fed at {dict[animal][3]} ***\n")
+        else: 
+            pass
+    f.close
 
 animals_list = read_file('zoo_animals.txt')
 animals_list = format_list(animals_list, "/")
@@ -233,5 +247,6 @@ animals_list = fix_type(animals_list)
 animal_dict = list_to_dict(animals_list)
 print(animal_dict)
 visit_planner(animal_dict)
+create_poster("6/8", animal_dict)
 
 
