@@ -118,16 +118,20 @@ def get_input_list(question, delimiter):
             answer = answer.split(delimiter)
             for i in range(2):
                 answer[i] = int(answer[i])
-            incorrect_input = False
+
+            if answer[0] <= 0 or answer[1] <= 0: 
+                print("Your input is incorrect, please try again")
+            else: 
+                incorrect_input = False
         except:
             print("Your input is incorrect, please try again")
         
     return answer
 
 def visit_planner(dict):
-    date = get_input_list("What date would you like to visit the Stockholm zoo? ", "/")
+    date = get_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
     print("The zoo is open from 06-22")
-    time = get_input_list("What time would you like to enter and leave the zoo? ", "-")
+    time = get_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
 
     if time[0] > 22 or time[0] < 6:
        print("Sorry, the zoo is closed at this time")
