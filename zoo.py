@@ -10,6 +10,7 @@ from os import read
 from pathlib import Path
 
 
+
 def read_file(file):
     """
     Reads file and removes first line which only displays the format.
