@@ -9,6 +9,7 @@ Written by Elliot Stjernqvist
 from os import read
 from pathlib import Path
 
+
 def read_file(file):
     """
     Reads file and removes first line which only displays the format.
@@ -101,7 +102,7 @@ def animal_awake(dict, animal, time):
 
     if wakeup_time < sleep_time:
     
-        if time[0] >= wakeup_time and time[0] <= sleep_time:    # Bugg då tid är mindre än wakeup men större än sleep time ger false även om man borde träffa djuren
+        if time[0] >= wakeup_time and time[0] <= sleep_time:
             return True
         
         elif time[1] >= wakeup_time and time[1] <= sleep_time:
