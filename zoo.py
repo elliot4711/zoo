@@ -98,15 +98,18 @@ def animal_awake(dict, animal, time):
 
     wakeup_time = dict[animal][1]
     sleep_time = dict[animal][2]
-    
+
     if wakeup_time < sleep_time:
     
-        if time[0] >= wakeup_time and time[0] <= sleep_time:
+        if time[0] >= wakeup_time and time[0] <= sleep_time:    # Bugg då tid är mindre än wakeup men större än sleep time ger false även om man borde träffa djuren
             return True
         
         elif time[1] >= wakeup_time and time[1] <= sleep_time:
             return True
         
+        elif time[0] <= wakeup_time and time[1] >= sleep_time:
+            return True
+
         else: 
             return False
     
@@ -117,6 +120,9 @@ def animal_awake(dict, animal, time):
             return True
         
         elif time[1] >= wakeup_time or time[1] <= sleep_time:
+            return True
+        
+        elif time[0] >= wakeup_time and time[1] >= sleep_time:
             return True
         
         else: 
@@ -164,6 +170,8 @@ def animal_feeding(dict, animal, time):
         return False
     elif feeding_time in time: 
         return True
+    else:
+        return False
 
 
 def get_key_list(dict):
@@ -224,6 +232,7 @@ def visit_planner(dict):
             else:
                 pass
 
+
 def create_poster(date, dict):
     filename = Path("poster_for_{date}")
     filename.touch(exist_ok=True)  # will create file, if it exists will do nothing
@@ -244,9 +253,10 @@ animals_list = read_file('zoo_animals.txt')
 animals_list = format_list(animals_list, "/")
 animals_list = fix_blankspace(animals_list)
 animals_list = fix_type(animals_list)
+print(animals_list)
 animal_dict = list_to_dict(animals_list)
 print(animal_dict)
 visit_planner(animal_dict)
-create_poster("6/8", animal_dict)
+# create_poster("6/8", animal_dict)
 
 
