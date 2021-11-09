@@ -192,6 +192,8 @@ class animal_checks:
 
 
 class inputs:
+    
+    
     def get_input_list(question, delimiter):
         """
         Takes input from user for certain frames of time, handles wrong inputs
@@ -254,7 +256,7 @@ class poster:
         date = date.split("/")
         for i in range(len(date)):
             date[i] = int(date[i])
-        print(date)
+
         poster.create_poster(date, dict)
     
     def poster_date():
