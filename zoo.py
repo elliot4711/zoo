@@ -7,6 +7,7 @@ Written by Elliot Stjernqvist
 
 from os import read
 from pathlib import Path
+from datetime import datetime
 
 class file_handling:
 
@@ -103,6 +104,7 @@ class dict_handling:
 
 
 class animal_checks:
+
 
     def animal_awake(dict, animal, time):
         """
@@ -220,35 +222,49 @@ class inputs:
             
         return answer
 
-def visit_planner(dict):
-    date = inputs.get_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
-    print("The zoo is open from 06-22")
-    time = inputs.get_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
 
-    if time[0] > 22 or time[0] < 6:
-       print("Sorry, the zoo is closed at this time")
-    
-    else: 
-        print("The zoo is open")
-        print("During your visit you will see:")
-        animals = dict_handling.get_key_list(dict)
-        for animal in animals:
-            if animal_checks.animal_awake(dict, animal, time) and animal_checks.animal_not_hibernating(dict, animal, date) and animal_checks.animal_feeding(dict, animal, time):
-                print(f"{animal} *** will be fed at {dict[animal][3]} ***")
-            elif animal_checks.animal_awake(dict, animal, time) and animal_checks.animal_not_hibernating(dict, animal, date):
-                print(f"{animal}")
-            else:
-                pass
+class visit:
+    def visit_planner(dict):
+        date = inputs.get_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
+        print("The zoo is open from 06-22")
+        time = inputs.get_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
+
+        if time[0] > 22 or time[0] < 6:
+            print("Sorry, the zoo is closed at this time")
+        
+        else: 
+            print("The zoo is open")
+            print("During your visit you will see:")
+            animals = dict_handling.get_key_list(dict)
+            for animal in animals:
+                if animal_checks.animal_awake(dict, animal, time) and animal_checks.animal_not_hibernating(dict, animal, date) and animal_checks.animal_feeding(dict, animal, time):
+                    print(f"{animal} *** will be fed at {dict[animal][3]} ***")
+                elif animal_checks.animal_awake(dict, animal, time) and animal_checks.animal_not_hibernating(dict, animal, date):
+                    print(f"{animal}")
+                else:
+                    pass
 
 class poster:
+
+    def todays_poster(dict):
+        today = datetime.today()
+
+        # dd/mm/YY
+        date = today.strftime("%d/%m")
+        date = date.split("/")
+        for i in range(len(date)):
+            date[i] = int(date[i])
+        print(date)
+        poster.create_poster(date, dict)
     
+    def poster_date():
+        answer = inputs.get_input_list("For what date would you like to create a poster? ", "/")
+
+        return answer
     
     def create_poster(date, dict):
         
-        
-        date = date.split("/")
-        for i in range(2):
-            date[i] = int(date[i])
+
         date_text = str(date[0]) + "-" + str(date[1])
         
         filename = Path(f"poster_for {date_text}")
@@ -273,7 +289,9 @@ animals_list = file_handling.fix_type(animals_list)
 print(animals_list)
 animal_dict = dict_handling.list_to_dict(animals_list)
 print(animal_dict)
-#visit_planner(animal_dict)
-poster.create_poster("6/8", animal_dict)
+#visit.visit_planner(animal_dict)
+#poster_date = poster.poster_date()
+#poster.create_poster(poster_date, animal_dict)
+poster.todays_poster(animal_dict)
 
 
