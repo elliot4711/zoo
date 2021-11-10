@@ -7,10 +7,12 @@ Written by Elliot Stjernqvist
 
 from os import read
 from pathlib import Path
-from datetime import datetime
+from datetime import date, datetime
 
 class file_handling:
 
+    def __init__(self, file):
+        self.file = file
 
     def read_file(file):
         """
@@ -76,11 +78,22 @@ class file_handling:
         
         return list
 
+    def get_list(self):
+        self.animals_list = file_handling.read_file(self.file)
+        self.animals_list = file_handling.format_list(self.animals_list, "/")
+        self.animals_list = file_handling.fix_blankspace(self.animals_list)
+        self.animals_list = file_handling.fix_type(self.animals_list)
+        
+        return self.animals_list
+
 
 class dict_handling:
+
+    def __init__(self, list):
+        self.list = list
     
     
-    def list_to_dict(list):
+    def list_to_dict(self):
         """
         Converts list of lists with animal properties to a dictionary with key being the animals name
         Argument: List to be converted
@@ -94,13 +107,13 @@ class dict_handling:
 
         return animal_dict 
 
-    def get_key_list(dict):
+    def get_key_list(self):
         """Gives list of keys in dictionary
         Argument: dict: Dictionary to find keys in
         Return: List of dictionary keys
         """
         
-        return [*dict]
+        return [*animal_dict]
 
 
 class animal_checks:
@@ -225,8 +238,14 @@ class inputs:
         return answer
 
 
-class visit:
-    def visit_planner(dict):
+class visit_planner:
+
+    def __init__(self, dict, animals):
+        self.dict = dict
+        self.animals = animals
+        
+    
+    def visit(self):
         date = inputs.get_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
         print("The zoo is open from 06-22")
         time = inputs.get_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
@@ -237,34 +256,36 @@ class visit:
         else: 
             print("The zoo is open")
             print("During your visit you will see:")
-            animals = dict_handling.get_key_list(dict)
-            for animal in animals:
-                if animal_checks.animal_awake(dict, animal, time) and animal_checks.animal_not_hibernating(dict, animal, date) and animal_checks.animal_feeding(dict, animal, time):
-                    print(f"{animal} *** will be fed at {dict[animal][3]} ***")
-                elif animal_checks.animal_awake(dict, animal, time) and animal_checks.animal_not_hibernating(dict, animal, date):
+            for animal in self.animals:
+                if animal_checks.animal_awake(self.dict, animal, time) and animal_checks.animal_not_hibernating(self.dict, animal, date) and animal_checks.animal_feeding(self.dict, animal, time):
+                    print(f"{animal} *** will be fed at {self.dict[animal][3]} ***")
+                elif animal_checks.animal_awake(self.dict, animal, time) and animal_checks.animal_not_hibernating(self.dict, animal, date):
                     print(f"{animal}")
                 else:
                     pass
 
-class poster:
+class poster_creation:
 
-    def todays_poster(dict):
+    def __init__(self, dict, animals):
+        self.dict = dict
+        self.animals = animals
+    
+    def todays_poster(self):
+
         today = datetime.today()
-
         # dd/mm/YY
         date = today.strftime("%d/%m")
         date = date.split("/")
         for i in range(len(date)):
             date[i] = int(date[i])
-
-        poster.create_poster(date, dict)
+        poster_creation.create_poster(self, dict, date, animals)
     
-    def poster_date():
-        answer = inputs.get_input_list("For what date would you like to create a poster? ", "/")
+    def poster_date(self):
+        date = inputs.get_input_list("For what date would you like to create a poster? ", "/")
 
-        return answer
+        return date
     
-    def create_poster(date, dict):
+    def create_poster(self, date):
         
 
         date_text = str(date[0]) + "-" + str(date[1])
@@ -274,26 +295,29 @@ class poster:
         f = open(filename, "w")
         
         f.write(f"Welcome to the Stockholm zoo!\nAt the zoo today {date_text} you can see\n")
-        animals = dict_handling.get_key_list(dict)
-        
-        for animal in animals:
-            if animal_checks.animal_not_hibernating(dict, animal, date):
-                f.write(f"{animal} *** will be fed at {dict[animal][3]} ***\n")
+        for animal in self.animals:
+            if animal_checks.animal_not_hibernating(self.dict, animal, date):
+                f.write(f"{animal} *** will be fed at {self.dict[animal][3]} ***\n")
             else: 
                 pass
         
         f.close
 
-animals_list = file_handling.read_file('zoo_animals.txt')
-animals_list = file_handling.format_list(animals_list, "/")
-animals_list = file_handling.fix_blankspace(animals_list)
-animals_list = file_handling.fix_type(animals_list)
-print(animals_list)
-animal_dict = dict_handling.list_to_dict(animals_list)
+file = file_handling('zoo_animals.txt')
+list = file.get_list()
+print(file.get_list())
+
+dict = dict_handling(list)
+animal_dict = dict.list_to_dict()
 print(animal_dict)
-#visit.visit_planner(animal_dict)
+animals = dict.get_key_list()
+
+visit = visit_planner(animal_dict, animals)
+visit.visit()
+
+poster = poster_creation(animal_dict, animals)
 #poster_date = poster.poster_date()
-#poster.create_poster(poster_date, animal_dict)
-poster.todays_poster(animal_dict)
+#poster.create_poster(poster_date)
+#poster.todays_poster()
 
 
