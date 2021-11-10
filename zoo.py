@@ -320,4 +320,4 @@ poster = poster_creation(animal_dict, animals)
 #poster.create_poster(poster_date)
 #poster.todays_poster()
 
-
+# To do, make inits for animal check and maybe inputs
