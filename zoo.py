@@ -204,38 +204,36 @@ class animal_checks:
             return False
 
 
-class inputs:
-    
-    
-    def get_input_list(question, delimiter):
-        """
-        Takes input from user for certain frames of time, handles wrong inputs
-        Arguments: question: The question for the user to answer, delimiter: Where to split answer, for example 6-18 should be split at -
-        Return: List with answer split
-        """
 
-        incorrect_input = True
+def get_input_list(question, delimiter):
+    """
+    Takes input from user for certain frames of time, handles wrong inputs
+    Arguments: question: The question for the user to answer, delimiter: Where to split answer, for example 6-18 should be split at -
+    Return: List with answer split
+    """
 
-        while incorrect_input:
+    incorrect_input = True
+
+    while incorrect_input:
             
-            try:
+        try:
 
-                answer = input(question)
-                answer = answer.split(delimiter)
+            answer = input(question)
+            answer = answer.split(delimiter)
                 
-                for i in range(2):
-                    answer[i] = int(answer[i])
+            for i in range(2):
+                answer[i] = int(answer[i])
 
-                if answer[0] <= 0 or answer[1] <= 0: 
-                    print("Your input is incorrect, please try again")
-                
-                else: 
-                    incorrect_input = False
-            
-            except:
+            if answer[0] <= 0 or answer[1] <= 0: 
                 print("Your input is incorrect, please try again")
+                
+            else: 
+                incorrect_input = False
             
-        return answer
+        except:
+            print("Your input is incorrect, please try again")
+            
+    return answer
 
 
 class visit_planner:
@@ -246,9 +244,9 @@ class visit_planner:
         
     
     def visit(self):
-        date = inputs.get_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
+        date = get_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
         print("The zoo is open from 06-22")
-        time = inputs.get_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
+        time = get_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
 
         if time[0] > 22 or time[0] < 6:
             print("Sorry, the zoo is closed at this time")
@@ -278,12 +276,12 @@ class poster_creation:
         date = date.split("/")
         for i in range(len(date)):
             date[i] = int(date[i])
-        poster_creation.create_poster(self, dict, date, animals)
+        poster_creation.create_poster(self, date)
     
     def poster_date(self):
-        date = inputs.get_input_list("For what date would you like to create a poster? ", "/")
+        date = get_input_list("For what date would you like to create a poster? ", "/")
 
-        return date
+        poster_creation.create_poster(self, date)
     
     def create_poster(self, date):
         
@@ -313,11 +311,10 @@ print(animal_dict)
 animals = dict.get_key_list()
 
 visit = visit_planner(animal_dict, animals)
-visit.visit()
+#visit.visit()
 
 poster = poster_creation(animal_dict, animals)
-#poster_date = poster.poster_date()
-#poster.create_poster(poster_date)
+poster.poster_date()
 #poster.todays_poster()
 
 # To do, make inits for animal check and maybe inputs
