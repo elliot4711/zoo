@@ -118,26 +118,31 @@ class dict_handling:
 
 class animal_checks:
 
+    def __init__(self, dict, time, date):
+        self.dict = dict
+        self.time = time
+        self.date = date
+        
 
-    def animal_awake(dict, animal, time):
+    def animal_awake(self, animal):
         """
         Checks if animal is awake in specified time frame
         Arguments: dict: dictionary with animal data, animal: animal in question, time: time frame visitors will visit in
         Return: True if animal is awake, False if sleeping
         """
 
-        wakeup_time = dict[animal][1]
-        sleep_time = dict[animal][2]
+        wakeup_time = self.dict[animal][1]
+        sleep_time = self.dict[animal][2]
 
         if wakeup_time < sleep_time:
         
-            if time[0] >= wakeup_time and time[0] <= sleep_time:
+            if self.time[0] >= wakeup_time and self.time[0] <= sleep_time:
                 return True
             
-            elif time[1] >= wakeup_time and time[1] <= sleep_time:
+            elif self.time[1] >= wakeup_time and self.time[1] <= sleep_time:
                 return True
             
-            elif time[0] <= wakeup_time and time[1] >= sleep_time:
+            elif self.time[0] <= wakeup_time and self.time[1] >= sleep_time:
                 return True
 
             else: 
@@ -146,27 +151,27 @@ class animal_checks:
         else:
             #After midnight
             
-            if time[0] >= wakeup_time or time[0] <= sleep_time:
+            if self.time[0] >= wakeup_time or self.time[0] <= sleep_time:
                 return True
             
-            elif time[1] >= wakeup_time or time[1] <= sleep_time:
+            elif self.time[1] >= wakeup_time or self.time[1] <= sleep_time:
                 return True
             
-            elif time[0] >= wakeup_time and time[1] >= sleep_time:
+            elif self.time[0] >= wakeup_time and self.time[1] >= sleep_time:
                 return True
             
             else: 
                 return False
 
     
-    def animal_not_hibernating(dict, animal, date):
+    def animal_not_hibernating(self, animal):
         """Checks if animal is hibernating during specified date
         Arguments: dict: dictionary with animal data, animal: animal in question, date: date visitors will visit
         Return: True if animal not hibernating, False if animal is hibernating
         """
 
-        hibernation_season = dict[animal][0]
-        month = date[1]
+        hibernation_season = self.dict[animal][0]
+        month = self.date[1]
 
         winter = [12, 1, 2]
         summer = range(6, 9)
@@ -189,13 +194,13 @@ class animal_checks:
             return True
         
 
-    def animal_feeding(dict, animal, time):
+    def animal_feeding(self, animal):
         """Checks if animal will recieve food in specified time frame
         Arguments: dict: dictionary with animal data, animal: animal in question, time: time frame visitors will visit in
         Return: True if animal will recieve food during specified time frame, False if not
         """
-        time = range(time[0], time[1]) 
-        feeding_time = dict[animal][3]
+        time = range(self.time[0], self.time[1]) 
+        feeding_time = self.dict[animal][3]
         if feeding_time == "-":
             return False
         elif feeding_time in time: 
@@ -251,13 +256,14 @@ class visit_planner:
         if time[0] > 22 or time[0] < 6:
             print("Sorry, the zoo is closed at this time")
         
-        else: 
+        else:
+            check = animal_checks(self.dict, time, date) 
             print("The zoo is open")
             print("During your visit you will see:")
             for animal in self.animals:
-                if animal_checks.animal_awake(self.dict, animal, time) and animal_checks.animal_not_hibernating(self.dict, animal, date) and animal_checks.animal_feeding(self.dict, animal, time):
+                if check.animal_awake(animal) and check.animal_not_hibernating(animal) and check.animal_feeding(animal):
                     print(f"{animal} *** will be fed at {self.dict[animal][3]} ***")
-                elif animal_checks.animal_awake(self.dict, animal, time) and animal_checks.animal_not_hibernating(self.dict, animal, date):
+                elif check.animal_awake(animal) and check.animal_not_hibernating(animal):
                     print(f"{animal}")
                 else:
                     pass
@@ -293,8 +299,9 @@ class poster_creation:
         f = open(filename, "w")
         
         f.write(f"Welcome to the Stockholm zoo!\nAt the zoo today {date_text} you can see\n")
+        check = animal_checks(self.dict, [0, 24], date) 
         for animal in self.animals:
-            if animal_checks.animal_not_hibernating(self.dict, animal, date):
+            if check.animal_not_hibernating(animal):
                 f.write(f"{animal} *** will be fed at {self.dict[animal][3]} ***\n")
             else: 
                 pass
