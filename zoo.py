@@ -11,10 +11,11 @@ from datetime import date, datetime
 
 class file_handling:
 
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, file_name, delimiter):
+        self.file_name = file_name
+        self.delimiter = delimiter
 
-    def read_file(file):
+    def read_file(self):
         """
         Reads file and removes first line which only displays the format.
         Argument: the file to be read
@@ -23,7 +24,7 @@ class file_handling:
 
         list = []
 
-        file1 = open(file, 'r')
+        file1 = open(self.file_name, 'r')
         
         lines = file1.readlines()
         for line in lines: 
@@ -33,7 +34,7 @@ class file_handling:
         return list
         
 
-    def format_list(list, delimiter):
+    def format_list(self, list):
         """
         Formats list by splitting it into multiple lists one for each animal
         Arguments: list to be formated and delimiter to split list by
@@ -42,12 +43,11 @@ class file_handling:
 
         split_list = []
         for i in range(len(list)):
-            split_list.append((list[i].split(delimiter)))
-        
+            split_list.append((list[i].split(self.delimiter)))
         return split_list
 
 
-    def fix_blankspace(list):
+    def fix_blankspace(self, list):
         """
         Removes the blankspace around every object in the list
         Argument: List to be fixed
@@ -61,7 +61,7 @@ class file_handling:
         return list
 
 
-    def fix_type(list):
+    def fix_type(self, list):
         """
         Converts all objects to the correct types and splits up objects representing a space of time for example 13-16
         Argument: List to be fixed
@@ -79,10 +79,10 @@ class file_handling:
         return list
 
     def get_list(self):
-        self.animals_list = file_handling.read_file(self.file)
-        self.animals_list = file_handling.format_list(self.animals_list, "/")
-        self.animals_list = file_handling.fix_blankspace(self.animals_list)
-        self.animals_list = file_handling.fix_type(self.animals_list)
+        self.animals_list = file.read_file()
+        self.animals_list = file.format_list(self.animals_list)
+        self.animals_list = file.fix_blankspace(self.animals_list)
+        self.animals_list = file.fix_type(self.animals_list)
         
         return self.animals_list
 
@@ -308,7 +308,7 @@ class poster_creation:
         
         f.close
 
-file = file_handling('zoo_animals.txt')
+file = file_handling('zoo_animals.txt', "/")
 list = file.get_list()
 print(file.get_list())
 
@@ -321,7 +321,6 @@ visit = visit_planner(animal_dict, animals)
 #visit.visit()
 
 poster = poster_creation(animal_dict, animals)
-poster.poster_date()
-#poster.todays_poster()
+#poster.poster_date()
+poster.todays_poster()
 
-# To do, make inits for animal check and maybe inputs
