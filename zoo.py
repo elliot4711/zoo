@@ -8,6 +8,8 @@ Written by Elliot Stjernqvist
 from os import read
 from pathlib import Path
 from datetime import date, datetime
+from tkinter import *
+from tkmacosx import Button as button
 
 class file_handling:
 
@@ -308,6 +310,29 @@ class poster_creation:
         
         f.close
 
+class zoo_text:
+    def __init__(self, dict, animals):
+        self.dict = dict
+        self.animals = animals
+    
+    def get_text(self, date):
+        
+
+        date_text = str(date[0]) + "-" + str(date[1])
+        
+        text = (f"Welcome to the Stockholm zoo!\nAt the zoo today {date_text} you can see\n")
+        check = animal_checks(self.dict, [0, 24], date) 
+        for animal in self.animals:
+            if check.animal_not_hibernating(animal):
+                text += (f"{animal} *** will be fed at {self.dict[animal][3]} ***\n")
+            else: 
+                pass
+        
+        return text
+
+def clicked():
+    lbl.configure(text = text1.get_text([12,2]))
+
 file = file_handling('zoo_animals.txt', "/")
 list = file.get_list()
 print(file.get_list())
@@ -321,6 +346,16 @@ visit = visit_planner(animal_dict, animals)
 #visit.visit()
 
 poster = poster_creation(animal_dict, animals)
+text1 = zoo_text(animal_dict, animals)
 #poster.poster_date()
-poster.todays_poster()
+#poster.todays_poster()
+window = Tk()
+window.title("Zoo calender")
+lbl = Label(window, text = text1.get_text([12,8]))
+lbl.grid(column=0, row=0)
+window.geometry('800x600')
+btn = button(window, text="Click Me", bg="blue", fg="white", command=clicked)
+btn.grid(column=1, row=0)
+
+window.mainloop()
 
