@@ -338,12 +338,17 @@ class click:
         self.date = date
         print(date)
     
-    def clicked(self):
-        date = click.get_next_date()
+    def clicked_positive(self):
+        date = click.get_next_date_positive()
         print(self.date)
         lbl.configure(text = text1.get_text(self.date))
     
-    def get_next_date(self):
+    def clicked_negative(self):
+        date = click.get_next_date_negative()
+        print(self.date)
+        lbl.configure(text = text1.get_text(self.date))
+    
+    def get_next_date_positive(self):
         day = self.date[0]
         month = self.date[1]
         days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
@@ -362,6 +367,30 @@ class click:
             else:
                 month = month + 1
                 day = 1
+                date_list.append(day)
+                date_list.append(month)
+        
+        self.date = date_list
+    
+    def get_next_date_negative(self):
+        day = self.date[0]
+        month = self.date[1]
+        days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
+        date_list = []
+        
+        if day in range(2, days_in_month[1]):
+            day = day - 1
+            date_list.append(day)
+            date_list.append(month)
+        else:
+            if month == 1:
+                month = 12
+                day = 31
+                date_list.append(day)
+                date_list.append(month)
+            else:
+                month = month -1
+                day = days_in_month[1] + 1
                 date_list.append(day)
                 date_list.append(month)
         
@@ -393,11 +422,13 @@ for i in range(len(date)):
 window = Tk()
 window.title("Zoo calender")
 lbl = Label(window, text = text1.get_text(date))
-lbl.grid(column=0, row=0)
+lbl.grid(column=1, row=0)
 window.geometry('800x600')
 click = click(date)
-btn = button(window, text="Click Me", bg="blue", fg="white", command=click.clicked)
-btn.grid(column=1, row=0)
+btn = button(window, text="--->", bg="blue", fg="white", command=click.clicked_positive)
+btn2 = button(window, text="<---", bg="blue", fg="white", command=click.clicked_negative)
+btn.grid(column=2, row=0)
+btn2.grid(column=0, row=0)
 
 window.mainloop()
 
