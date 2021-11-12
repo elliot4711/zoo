@@ -10,6 +10,9 @@ from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
 from tkmacosx import Button as button
+from calendar import monthrange
+from functools import partial
+
 
 class file_handling:
 
@@ -330,16 +333,36 @@ class zoo_text:
         
         return text
 
-def clicked():
-    lbl.configure(text = text1.get_text([12,2]))
+class click:
+    def __init__(self, date):
+        self.date = date
+        print(date)
+    
+    def clicked(self):
+        date = click.get_next_date()
+        print(self.date)
+        lbl.configure(text = text1.get_text(self.date))
+    
+    def get_next_date(self):
+        day = self.date[0]
+        month = self.date[1]
+        days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
+        date_list = []
+        if day in range(days_in_month[0], days_in_month[1]):
+            date_list.append(day + 1)
+            date_list.append(month)
+        else:
+            date_list.append(1)
+            date_list.append(month+1)
+        self.date = date_list
 
 file = file_handling('zoo_animals.txt', "/")
 list = file.get_list()
-print(file.get_list())
+#print(file.get_list())
 
 dict = dict_handling(list)
 animal_dict = dict.list_to_dict()
-print(animal_dict)
+#print(animal_dict)
 animals = dict.get_key_list()
 
 visit = visit_planner(animal_dict, animals)
@@ -349,12 +372,20 @@ poster = poster_creation(animal_dict, animals)
 text1 = zoo_text(animal_dict, animals)
 #poster.poster_date()
 #poster.todays_poster()
+
+today = datetime.today()
+date = today.strftime("%d/%m")
+date = date.split("/")
+for i in range(len(date)):
+    date[i] = int(date[i])
+
 window = Tk()
 window.title("Zoo calender")
-lbl = Label(window, text = text1.get_text([12,8]))
+lbl = Label(window, text = text1.get_text(date))
 lbl.grid(column=0, row=0)
 window.geometry('800x600')
-btn = button(window, text="Click Me", bg="blue", fg="white", command=clicked)
+click = click(date)
+btn = button(window, text="Click Me", bg="blue", fg="white", command=click.clicked())
 btn.grid(column=1, row=0)
 
 window.mainloop()
