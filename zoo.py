@@ -348,12 +348,16 @@ class click:
         month = self.date[1]
         days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
         date_list = []
+        date_list.append(day + 1)
+        date_list.append(month)
+        """
         if day in range(days_in_month[0], days_in_month[1]):
             date_list.append(day + 1)
             date_list.append(month)
         else:
             date_list.append(1)
-            date_list.append(month+1)
+            date_list.append(month + 1)
+        """
         self.date = date_list
 
 file = file_handling('zoo_animals.txt', "/")
