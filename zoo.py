@@ -385,7 +385,7 @@ lbl = Label(window, text = text1.get_text(date))
 lbl.grid(column=0, row=0)
 window.geometry('800x600')
 click = click(date)
-btn = button(window, text="Click Me", bg="blue", fg="white", command=click.clicked())
+btn = button(window, text="Click Me", bg="blue", fg="white", command=click.clicked)
 btn.grid(column=1, row=0)
 
 window.mainloop()
