@@ -9,7 +9,8 @@ from os import read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-from tkmacosx import Button as button
+from tkinter import Button as button # use this one if not on mac
+#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from calendar import monthrange
 from functools import partial
 
@@ -377,8 +378,7 @@ class click:
         month = self.date[1]
         days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
         date_list = []
-        
-        if day in range(2, days_in_month[1]):
+        if day in range(2, days_in_month[1] + 1):
             day = day - 1
             date_list.append(day)
             date_list.append(month)
@@ -390,7 +390,7 @@ class click:
                 date_list.append(month)
             else:
                 month = month -1
-                day = days_in_month[1] + 1
+                day = monthrange(2021, month)[1]
                 date_list.append(day)
                 date_list.append(month)
         
