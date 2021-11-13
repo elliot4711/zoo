@@ -395,6 +395,22 @@ class click:
                 date_list.append(month)
         
         self.date = date_list
+    
+    def show_date_entry(self):
+        date_entered = entry.get()
+        date_entered = date_entered.split("/")
+                
+        for i in range(2):
+            date_entered[i] = int(date_entered[i])
+        lbl.configure(text = text1.get_text(date_entered))
+
+def get_date():
+    today = datetime.today()
+    date = today.strftime("%d/%m")
+    date = date.split("/")
+    for i in range(len(date)):
+        date[i] = int(date[i])
+    return date
 
 file = file_handling('zoo_animals.txt', "/")
 list = file.get_list()
@@ -413,22 +429,20 @@ text1 = zoo_text(animal_dict, animals)
 #poster.poster_date()
 #poster.todays_poster()
 
-today = datetime.today()
-date = today.strftime("%d/%m")
-date = date.split("/")
-for i in range(len(date)):
-    date[i] = int(date[i])
-
 window = Tk()
 window.title("Zoo calender")
-lbl = Label(window, text = text1.get_text(date))
+lbl = Label(window, text = text1.get_text(get_date()))
 lbl.grid(column=1, row=0)
 window.geometry('800x600')
-click = click(date)
+click = click(get_date())
 btn = button(window, text="--->", bg="blue", fg="white", command=click.clicked_positive)
 btn2 = button(window, text="<---", bg="blue", fg="white", command=click.clicked_negative)
 btn.grid(column=2, row=0)
 btn2.grid(column=0, row=0)
+entry = Entry(window)
+btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
+btn3.grid(column=1, row=2)
+entry.grid(column=1, row=1)
 
 window.mainloop()
 
