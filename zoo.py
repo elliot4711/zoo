@@ -411,6 +411,7 @@ def kth_popup():
 
 def order_66_popup():
     tkinter.messagebox.showinfo(title="Info", message="It will be done my lord! *dramatic music")
+    window.destroy()
 
 def get_date():
     today = datetime.today()
@@ -441,7 +442,7 @@ window = Tk()
 window.title("Zoo calender")
 lbl = Label(window, text = text1.get_text(get_date()))
 lbl.grid(column=1, row=0)
-window.geometry('800x600')
+window.geometry('400x300')
 
 click = click(get_date())
 
