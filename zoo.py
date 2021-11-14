@@ -11,8 +11,10 @@ from datetime import date, datetime
 from tkinter import *
 from tkinter import Button as button # use this one if not on mac
 #from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+from tkinter import messagebox
 from calendar import monthrange
 from functools import partial
+import tkinter
 
 
 class file_handling:
@@ -404,6 +406,9 @@ class click:
             date_entered[i] = int(date_entered[i])
         lbl.configure(text = text1.get_text(date_entered))
 
+def kth_popup():
+    tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food and a fermented wheat beverage, to the point where the student will sometimes refuse to consume fresh food or water, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
+
 def get_date():
     today = datetime.today()
     date = today.strftime("%d/%m")
@@ -443,6 +448,8 @@ entry = Entry(window)
 btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
 btn3.grid(column=1, row=2)
 entry.grid(column=1, row=1)
+btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=kth_popup)
+btn4.grid(column=1, row=3)
 
 window.mainloop()
 
