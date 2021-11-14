@@ -439,17 +439,21 @@ window.title("Zoo calender")
 lbl = Label(window, text = text1.get_text(get_date()))
 lbl.grid(column=1, row=0)
 window.geometry('800x600')
+
 click = click(get_date())
+
 btn = button(window, text="--->", bg="blue", fg="white", command=click.clicked_positive)
 btn2 = button(window, text="<---", bg="blue", fg="white", command=click.clicked_negative)
+btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
+btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=kth_popup)
+
 btn.grid(column=2, row=0)
 btn2.grid(column=0, row=0)
-entry = Entry(window)
-btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
 btn3.grid(column=1, row=2)
-entry.grid(column=1, row=1)
-btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=kth_popup)
 btn4.grid(column=1, row=3)
+
+entry = Entry(window)
+entry.grid(column=1, row=1)
 
 window.mainloop()
 
