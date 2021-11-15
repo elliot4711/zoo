@@ -9,8 +9,8 @@ from os import read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-#from tkinter import Button as button # use this one if not on mac
-from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+from tkinter import Button as button # use this one if not on mac
+#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
 from functools import partial
@@ -406,6 +406,7 @@ class click:
             for i in range(2):
                 date_entered[i] = int(date_entered[i])
             lbl.configure(text = text1.get_text(date_entered))
+            self.date = date_entered
         except:
             tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
 
