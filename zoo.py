@@ -9,8 +9,8 @@ from os import read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-from tkinter import Button as button # use this one if not on mac
-#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+#from tkinter import Button as button # use this one if not on mac
+from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
 from functools import partial
@@ -400,11 +400,14 @@ class click:
     
     def show_date_entry(self):
         date_entered = entry.get()
-        date_entered = date_entered.split("/")
+        try:
+            date_entered = date_entered.split("/")
                 
-        for i in range(2):
-            date_entered[i] = int(date_entered[i])
-        lbl.configure(text = text1.get_text(date_entered))
+            for i in range(2):
+                date_entered[i] = int(date_entered[i])
+            lbl.configure(text = text1.get_text(date_entered))
+        except:
+            tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
 
 def kth_popup():
     tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food, to the point where the student will sometimes refuse to consume fresh food, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
@@ -463,3 +466,4 @@ entry.grid(column=1, row=1)
 
 window.mainloop()
 
+#Fixa komma ihåg datum så inte hoppar tillbaka när man skrivit in datum
