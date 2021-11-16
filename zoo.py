@@ -9,12 +9,14 @@ from os import read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-from tkinter import Button as button # use this one if not on mac
-#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+#from tkinter import Button as button # use this one if not on mac
+from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
 from functools import partial
 import tkinter
+from tkinter import PhotoImage
+from tkinter import Image
 
 
 class file_handling:
@@ -446,7 +448,7 @@ window = Tk()
 window.title("Zoo calender")
 lbl = Label(window, text = text1.get_text(get_date()))
 lbl.grid(column=1, row=0)
-window.geometry('400x300')
+window.geometry('600x600')
 
 click = click(get_date())
 
@@ -465,6 +467,11 @@ btn5.grid(column=1, row=4)
 entry = Entry(window)
 entry.grid(column=1, row=1)
 
-window.mainloop()
+canv = Canvas(window, width=313, height=313, bg='white')
+canv.grid(row=5, column=1)
 
-#Fixa komma ihåg datum så inte hoppar tillbaka när man skrivit in datum
+img = PhotoImage(file="welcome-the-the-zoo-background.gif")
+img = img.subsample(2)
+canv.create_image(313/2,313/2, image=img)
+
+window.mainloop()
