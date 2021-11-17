@@ -17,6 +17,10 @@ import tkinter
 
 
 class file_handling:
+    """
+    Handles reading and formating info from files
+    """
+
 
     def __init__(self, file_name, delimiter):
         """
@@ -26,6 +30,7 @@ class file_handling:
 
         self.file_name = file_name
         self.delimiter = delimiter
+
 
     def read_file(self):
         """
@@ -89,11 +94,13 @@ class file_handling:
         
         return list
 
+
     def get_list(self):
         """
         Carries out all methods in order to turn file contents into list
         Return: List of animal info
         """
+
         self.animals_list = file.read_file()
         self.animals_list = file.format_list(self.animals_list)
         self.animals_list = file.fix_blankspace(self.animals_list)
@@ -103,12 +110,17 @@ class file_handling:
 
 
 class dict_handling: #It would be possible to create an animal class and class instances for each animal, but this did not simplify the code much as it still required things like animal_list[i].get_sleep_time() instead of just dict[animal][3]
+    """
+    Handles turning lists of file info into dictionary and giving keys of said dictionary
+    """
+
 
     def __init__(self, list):
         """
         Initializes class and attributes
         Arguement: List of animal info
         """
+
         self.list = list
     
     
@@ -125,6 +137,7 @@ class dict_handling: #It would be possible to create an animal class and class i
 
         return animal_dict 
 
+
     def get_key_list(self):
         """
         Gives list of keys in dictionary
@@ -135,6 +148,10 @@ class dict_handling: #It would be possible to create an animal class and class i
 
 
 class animal_checks:
+    """
+    Carries out different checks for the state of the animals, always returns True or False
+    """
+
 
     def __init__(self, dict, time, date):
         """
@@ -219,10 +236,12 @@ class animal_checks:
         
 
     def animal_feeding(self, animal):
-        """Checks if animal will recieve food in specified time frame
+        """
+        Checks if animal will recieve food in specified time frame
         Argument: Animal in question
         Return: True if animal will recieve food during specified time frame, False if not
         """
+
         time = range(self.time[0], self.time[1]) 
         feeding_time = self.dict[animal][3]
         if feeding_time == "-":
@@ -240,6 +259,7 @@ def get_input_list(question, delimiter):
     Arguments: question: The question for the user to answer, delimiter: Where to split answer, for example 6-18 should be split at -
     Return: List with answer split
     """
+
 
     incorrect_input = True
 
@@ -266,13 +286,26 @@ def get_input_list(question, delimiter):
 
 
 class visit_planner:
+    """
+    Handles a visit at the zoo and printing out schedules 
+    """
+
 
     def __init__(self, dict, animals):
+        """
+        Initializes class and attributes
+        Arguments: dict: dictionary with animal data, animals: list of animals
+        """
+        
         self.dict = dict
         self.animals = animals
         
     
     def visit(self):
+        """
+        Handles a visit to the zoo and prints out what animals will be seen at the zoo during for a time and date
+        """
+
         date = get_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
         print("The zoo is open from 06-22")
         time = get_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
@@ -292,13 +325,27 @@ class visit_planner:
                 else:
                     pass
 
+
 class poster_creation:
+    """
+    Handles creating posters with schedule for zoo
+    """
+
 
     def __init__(self, dict, animals):
+        """
+        Initializes class and attributes
+        Arguments: dict: dictionary with animal data, animals: list of animals
+        """
+
         self.dict = dict
         self.animals = animals
     
+
     def todays_poster(self):
+        """
+        Creates a poster for todays date
+        """
 
         today = datetime.today()
         # dd/mm/YY
@@ -308,14 +355,22 @@ class poster_creation:
             date[i] = int(date[i])
         poster_creation.create_poster(self, date)
     
+
     def poster_date(self):
+        """
+        Asks user which date they would like to create a poster for and creates poster for that date
+        """
+
         date = get_input_list("For what date would you like to create a poster? ", "/")
 
         poster_creation.create_poster(self, date)
     
-    def create_poster(self, date):
-        
 
+    def create_poster(self, date):
+        """
+        Creates poster for a specified date
+        """
+        
         date_text = str(date[0]) + "-" + str(date[1])
         
         filename = Path(f"poster_for {date_text}")
@@ -332,13 +387,29 @@ class poster_creation:
         
         f.close
 
+
 class zoo_text:
+    """
+    Handles creating a text with all animals that can be seen for GUI
+    """
+
+
     def __init__(self, dict, animals):
+        """
+        Initializes class and attributes
+        Arguments: dict: dictionary with animal data, animals: list of animals
+        """
+
         self.dict = dict
         self.animals = animals
     
+
     def get_text(self, date):
-        
+        """
+        Gives text for which animals will be awake during a time
+        Argument: Date to generate text for
+        Return: Text of which animals will be awake and when they will be fed
+        """
 
         date_text = str(date[0]) + "-" + str(date[1])
         
@@ -353,21 +424,45 @@ class zoo_text:
         return text
 
 class click:
+    """
+    Handles button clicks in GUI
+    """
+
+
     def __init__(self, date):
+        """
+        Initializes class and attributes
+        Argument: Starting date for GUI
+        """
+
         self.date = date
-        print(date)
     
+
     def clicked_positive(self):
+        """
+        Changes text for moving 1 day forward in schedule
+        """
+
         date = click.get_next_date_positive()
         print(self.date)
         lbl.configure(text = text1.get_text(self.date))
     
+
     def clicked_negative(self):
+        """
+        Changes text for moving 1 day backwards in schedule
+        """
+
         date = click.get_next_date_negative()
         print(self.date)
         lbl.configure(text = text1.get_text(self.date))
     
+
     def get_next_date_positive(self):
+        """
+        Decides next date efter present date, handles overflow into next year
+        """
+
         day = self.date[0]
         month = self.date[1]
         days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
@@ -391,7 +486,12 @@ class click:
         
         self.date = date_list
     
+
     def get_next_date_negative(self):
+        """
+        Decides date before present date, handles overflow into last year
+        """
+
         day = self.date[0]
         month = self.date[1]
         days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
@@ -414,7 +514,12 @@ class click:
         
         self.date = date_list
     
+
     def show_date_entry(self):
+        """
+        Changes text to show schedule for specific input date
+        """
+
         date_entered = entry.get()
         try:
             date_entered = date_entered.split("/")
@@ -426,14 +531,29 @@ class click:
         except:
             tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
 
+
     def gui_poster(self):
+        """
+        Handles creating poster from GUI
+        """
+
         poster.create_poster(self.date)
 
+
 def kth_popup():
+    """
+    Creates fun popup about the KTH student
+    """
+
     tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food, to the point where the student will sometimes refuse to consume fresh food, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
 
 
 def get_date():
+    """
+    Gets current date
+    Return: Current date in useable form [day, month]
+    """
+
     today = datetime.today()
     date = today.strftime("%d/%m")
     date = date.split("/")
