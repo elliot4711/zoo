@@ -9,8 +9,8 @@ from os import read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-#from tkinter import Button as button # use this one if not on mac
-from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+from tkinter import Button as button # use this one if not on mac
+#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
 from functools import partial
@@ -412,12 +412,12 @@ class click:
         except:
             tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
 
+    def gui_poster(self):
+        poster.create_poster(self.date)
+
 def kth_popup():
     tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food, to the point where the student will sometimes refuse to consume fresh food, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
 
-def order_66_popup():
-    tkinter.messagebox.showinfo(title="Info", message="It will be done my lord! *dramatic music")
-    window.destroy()
 
 def get_date():
     today = datetime.today()
@@ -456,13 +456,13 @@ btn = button(window, text="--->", bg="blue", fg="white", command=click.clicked_p
 btn2 = button(window, text="<---", bg="blue", fg="white", command=click.clicked_negative)
 btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
 btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=kth_popup)
-btn5 = button(window, text="Execute order 66", bg="white", fg="white", command=order_66_popup)
+btn5 = button(window, text="Create poster for this day", bg="blue", fg="white", command=click.gui_poster)
 
 btn.grid(column=2, row=0)
 btn2.grid(column=0, row=0)
 btn3.grid(column=1, row=2)
-btn4.grid(column=1, row=3)
-btn5.grid(column=1, row=4)
+btn4.grid(column=1, row=4)
+btn5.grid(column=1, row=3)
 
 entry = Entry(window)
 entry.grid(column=1, row=1)
