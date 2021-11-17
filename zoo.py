@@ -13,23 +13,24 @@ from tkinter import Button as button # use this one if not on mac
 #from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
-from functools import partial
 import tkinter
-from tkinter import PhotoImage
-from tkinter import Image
 
 
 class file_handling:
 
     def __init__(self, file_name, delimiter):
+        """
+        Initializes class and attributes
+        Arguements: Name of file to handle and delimiter used to separate values in the file
+        """
+
         self.file_name = file_name
         self.delimiter = delimiter
 
     def read_file(self):
         """
         Reads file and removes first line which only displays the format.
-        Argument: the file to be read
-        Return: list of contents in file
+        Return: List of contents in file
         """
 
         list = []
@@ -47,7 +48,7 @@ class file_handling:
     def format_list(self, list):
         """
         Formats list by splitting it into multiple lists one for each animal
-        Arguments: list to be formated and delimiter to split list by
+        Argument: List to be formated
         Return: Formated list of lists
         """
 
@@ -89,6 +90,10 @@ class file_handling:
         return list
 
     def get_list(self):
+        """
+        Carries out all methods in order to turn file contents into list
+        Return: List of animal info
+        """
         self.animals_list = file.read_file()
         self.animals_list = file.format_list(self.animals_list)
         self.animals_list = file.fix_blankspace(self.animals_list)
@@ -97,16 +102,19 @@ class file_handling:
         return self.animals_list
 
 
-class dict_handling:
+class dict_handling: #It would be possible to create an animal class and class instances for each animal, but this did not simplify the code much as it still required things like animal_list[i].get_sleep_time() instead of just dict[animal][3]
 
     def __init__(self, list):
+        """
+        Initializes class and attributes
+        Arguement: List of animal info
+        """
         self.list = list
     
     
     def list_to_dict(self):
         """
         Converts list of lists with animal properties to a dictionary with key being the animals name
-        Argument: List to be converted
         Return: Dictionary of animal data
         """
         
@@ -118,8 +126,8 @@ class dict_handling:
         return animal_dict 
 
     def get_key_list(self):
-        """Gives list of keys in dictionary
-        Argument: dict: Dictionary to find keys in
+        """
+        Gives list of keys in dictionary
         Return: List of dictionary keys
         """
         
@@ -129,6 +137,11 @@ class dict_handling:
 class animal_checks:
 
     def __init__(self, dict, time, date):
+        """
+        Initializes class and attributes
+        Arguments: dict: dictionary with animal data, animal: animal in question, date: date visitors will visit
+        """
+       
         self.dict = dict
         self.time = time
         self.date = date
@@ -137,7 +150,7 @@ class animal_checks:
     def animal_awake(self, animal):
         """
         Checks if animal is awake in specified time frame
-        Arguments: dict: dictionary with animal data, animal: animal in question, time: time frame visitors will visit in
+        Argument: Animal in question
         Return: True if animal is awake, False if sleeping
         """
 
@@ -175,8 +188,9 @@ class animal_checks:
 
     
     def animal_not_hibernating(self, animal):
-        """Checks if animal is hibernating during specified date
-        Arguments: dict: dictionary with animal data, animal: animal in question, date: date visitors will visit
+        """
+        Checks if animal is hibernating during specified date
+        Argument: Animal in question
         Return: True if animal not hibernating, False if animal is hibernating
         """
 
@@ -206,7 +220,7 @@ class animal_checks:
 
     def animal_feeding(self, animal):
         """Checks if animal will recieve food in specified time frame
-        Arguments: dict: dictionary with animal data, animal: animal in question, time: time frame visitors will visit in
+        Argument: Animal in question
         Return: True if animal will recieve food during specified time frame, False if not
         """
         time = range(self.time[0], self.time[1]) 
