@@ -2,7 +2,6 @@
 A program to guide zoo visitors
 
 Written by Elliot Stjernqvist
-
 """
 
 from os import read
@@ -15,7 +14,7 @@ from tkinter import messagebox
 from calendar import monthrange
 import tkinter
 
-GUI = True #Change to False to use program in terminal mode
+GUI = True #Change to False to use program in terminal mode, note that terminal version of program is outdated. It can be used, but contains code repetition from the initial versions that was left only to allow the option of not using the GUI
 
 class file_handling:
     """
@@ -251,39 +250,6 @@ class animal_checks:
             return True
         else:
             return False
-
-
-
-def get_input_list(question, delimiter):
-    """
-    Takes input from user for certain frames of time, handles wrong inputs
-    Arguments: question: The question for the user to answer, delimiter: Where to split answer, for example 6-18 should be split at -
-    Return: List with answer split
-    """
-
-
-    incorrect_input = True
-
-    while incorrect_input:
-            
-        try:
-
-            answer = input(question)
-            answer = answer.split(delimiter)
-                
-            for i in range(2):
-                answer[i] = int(answer[i])
-
-            if answer[0] <= 0 or answer[1] <= 0: 
-                print("Your input is incorrect, please try again")
-                
-            else: 
-                incorrect_input = False
-            
-        except:
-            print("Your input is incorrect, please try again")
-            
-    return answer
 
 
 class visit_planner:
@@ -542,6 +508,36 @@ class click:
         tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food, to the point where the student will sometimes refuse to consume fresh food, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
 
 
+def get_input_list(question, delimiter):
+    """
+    Takes input from user for certain frames of time, handles wrong inputs
+    Arguments: question: The question for the user to answer, delimiter: Where to split answer, for example 6-18 should be split at -
+    Return: List with answer split
+    """
+
+
+    incorrect_input = True
+
+    while incorrect_input:
+            
+        try:
+
+            answer = input(question)
+            answer = answer.split(delimiter)
+                
+            for i in range(2):
+                answer[i] = int(answer[i])
+
+            if answer[0] <= 0 or answer[1] <= 0: 
+                print("Your input is incorrect, please try again")
+                
+            else: 
+                incorrect_input = False
+            
+        except:
+            print("Your input is incorrect, please try again")
+            
+    return answer
 
 
 def get_date():
@@ -566,7 +562,6 @@ if GUI:
     animal_dict = dict.list_to_dict()
     animals = dict.get_key_list()
 
-    visit = visit_planner(animal_dict, animals)
 
     poster = poster_creation(animal_dict, animals)
     animal_text = zoo_text(animal_dict, animals)
@@ -606,11 +601,9 @@ if GUI:
 else:
     file = file_handling('zoo_animals.txt', "/")
     list = file.get_list()
-    #print(file.get_list())
 
     dict = dict_handling(list)
     animal_dict = dict.list_to_dict()
-    #print(animal_dict)
     animals = dict.get_key_list()
 
     visit = visit_planner(animal_dict, animals)
