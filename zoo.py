@@ -15,6 +15,7 @@ from tkinter import messagebox
 from calendar import monthrange
 import tkinter
 
+GUI = True #Change to False to use program in terminal mode
 
 class file_handling:
     """
@@ -377,13 +378,7 @@ class poster_creation:
         filename.touch(exist_ok=True)  # will create file, if it exists will do nothing
         f = open(filename, "w")
         
-        f.write(f"Welcome to the Stockholm zoo!\nAt the zoo today {date_text} you can see\n")
-        check = animal_checks(self.dict, [0, 24], date) 
-        for animal in self.animals:
-            if check.animal_not_hibernating(animal):
-                f.write(f"{animal} *** will be fed at {self.dict[animal][3]} ***\n")
-            else: 
-                pass
+        f.write(animal_text.get_text(date))
         
         f.close
 
@@ -445,7 +440,7 @@ class click:
 
         date = click.get_next_date_positive()
         print(self.date)
-        lbl.configure(text = text1.get_text(self.date))
+        lbl.configure(text = animal_text.get_text(self.date))
     
 
     def clicked_negative(self):
@@ -455,7 +450,7 @@ class click:
 
         date = click.get_next_date_negative()
         print(self.date)
-        lbl.configure(text = text1.get_text(self.date))
+        lbl.configure(text = animal_text.get_text(self.date))
     
 
     def get_next_date_positive(self):
@@ -526,7 +521,7 @@ class click:
                 
             for i in range(2):
                 date_entered[i] = int(date_entered[i])
-            lbl.configure(text = text1.get_text(date_entered))
+            lbl.configure(text = animal_text.get_text(date_entered))
             self.date = date_entered
         except:
             tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
@@ -538,14 +533,15 @@ class click:
         """
 
         poster.create_poster(self.date)
+    
+    def kth_popup(self):
+        """
+        Creates fun popup about the KTH student
+        """
+
+        tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food, to the point where the student will sometimes refuse to consume fresh food, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
 
 
-def kth_popup():
-    """
-    Creates fun popup about the KTH student
-    """
-
-    tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food, to the point where the student will sometimes refuse to consume fresh food, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
 
 
 def get_date():
@@ -561,51 +557,66 @@ def get_date():
         date[i] = int(date[i])
     return date
 
-file = file_handling('zoo_animals.txt', "/")
-list = file.get_list()
-#print(file.get_list())
+    
+if GUI:
+    file = file_handling('zoo_animals.txt', "/")
+    list = file.get_list()
 
-dict = dict_handling(list)
-animal_dict = dict.list_to_dict()
-#print(animal_dict)
-animals = dict.get_key_list()
+    dict = dict_handling(list)
+    animal_dict = dict.list_to_dict()
+    animals = dict.get_key_list()
 
-visit = visit_planner(animal_dict, animals)
-#visit.visit()
+    visit = visit_planner(animal_dict, animals)
 
-poster = poster_creation(animal_dict, animals)
-text1 = zoo_text(animal_dict, animals)
-#poster.poster_date()
-#poster.todays_poster()
+    poster = poster_creation(animal_dict, animals)
+    animal_text = zoo_text(animal_dict, animals)
 
-window = Tk()
-window.title("Zoo calender")
-lbl = Label(window, text = text1.get_text(get_date()))
-lbl.grid(column=1, row=0)
-window.geometry('600x600')
+    window = Tk()
+    window.title("Zoo calender")
+    lbl = Label(window, text = animal_text.get_text(get_date()))
+    lbl.grid(column=1, row=0)
+    window.geometry('600x600')
 
-click = click(get_date())
+    click = click(get_date())
 
-btn = button(window, text="--->", bg="blue", fg="white", command=click.clicked_positive)
-btn2 = button(window, text="<---", bg="blue", fg="white", command=click.clicked_negative)
-btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
-btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=kth_popup)
-btn5 = button(window, text="Create poster for this day", bg="blue", fg="white", command=click.gui_poster)
+    btn = button(window, text="--->", bg="blue", fg="white", command=click.clicked_positive)
+    btn2 = button(window, text="<---", bg="blue", fg="white", command=click.clicked_negative)
+    btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
+    btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=click.kth_popup)
+    btn5 = button(window, text="Create poster for this day", bg="blue", fg="white", command=click.gui_poster)
 
-btn.grid(column=2, row=0)
-btn2.grid(column=0, row=0)
-btn3.grid(column=1, row=2)
-btn4.grid(column=1, row=4)
-btn5.grid(column=1, row=3)
+    btn.grid(column=2, row=0)
+    btn2.grid(column=0, row=0)
+    btn3.grid(column=1, row=2)
+    btn4.grid(column=1, row=4)
+    btn5.grid(column=1, row=3)
 
-entry = Entry(window)
-entry.grid(column=1, row=1)
+    entry = Entry(window)
+    entry.grid(column=1, row=1)
 
-canv = Canvas(window, width=313, height=313, bg='white')
-canv.grid(row=5, column=1)
+    canv = Canvas(window, width=313, height=313, bg='white')
+    canv.grid(row=5, column=1)
 
-img = PhotoImage(file="welcome-the-the-zoo-background.gif")
-img = img.subsample(2)
-canv.create_image(313/2,313/2, image=img)
+    img = PhotoImage(file="welcome-the-the-zoo-background.gif")
+    img = img.subsample(2)
+    canv.create_image(313/2,313/2, image=img)
 
-window.mainloop()
+    window.mainloop()
+    
+else:
+    file = file_handling('zoo_animals.txt', "/")
+    list = file.get_list()
+    #print(file.get_list())
+
+    dict = dict_handling(list)
+    animal_dict = dict.list_to_dict()
+    #print(animal_dict)
+    animals = dict.get_key_list()
+
+    visit = visit_planner(animal_dict, animals)
+    visit.visit()
+
+    poster = poster_creation(animal_dict, animals)
+    animal_text = zoo_text(animal_dict, animals)
+    #poster.poster_date()
+    #poster.todays_poster()
