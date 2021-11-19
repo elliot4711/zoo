@@ -252,7 +252,7 @@ class animal_checks:
             return False
 
 
-class visit_planner:
+class terminal_mode:
     """
     Handles a visit at the zoo and printing out schedules 
     """
@@ -266,9 +266,65 @@ class visit_planner:
         
         self.dict = dict
         self.animals = animals
+
+
+    def mode(self):
+        """
+        Handles choosing visitor or employee in terminal mode
+        """
+
+        wrong_input = True
         
+        while wrong_input:
+            
+            answer = input("Would you like to enter visitor or employee mode? Please enter either v or e: ")
+            
+            try:
+                answer = answer.lower()
+                
+                if answer == "v":
+                    wrong_input = False
+                    print("You have selected visitor mode")
+                    terminal_mode.visitor(self)
+                
+                elif answer == "e":
+                    wrong_input = False
+                    print("You have chosen employee mode")
+                    terminal_mode.employee(self)
+            
+            except:
+                print("Please enter a correct input either v or e")
+
     
-    def visit(self):
+    def employee(self):
+        """
+        Handles zoo functions in the terminal for employees taking answers and creating posters 
+        """
+        
+        wrong_input = True
+        
+        while wrong_input:
+            
+            answer = input("Would you like to create a poster for today or some other day? Enter either today or other: ")
+            
+            try:
+                answer = answer.lower()
+                
+                if answer == "today":
+                    wrong_input = False
+                    poster.todays_poster()
+                
+                elif answer == "other":
+                    wrong_input = False
+                    poster.poster_date()
+            
+                else:
+                    raise Exception
+            except:
+                print("Please enter a correct input either today or other")
+
+
+    def visitor(self):
         """
         Handles a visit to the zoo and prints out what animals will be seen at the zoo during for a time and date
         """
@@ -553,7 +609,7 @@ def get_date():
         date[i] = int(date[i])
     return date
 
-    
+ 
 if GUI:
     file = file_handling('zoo_animals.txt', "/")
     list = file.get_list()
@@ -605,11 +661,8 @@ else:
     dict = dict_handling(list)
     animal_dict = dict.list_to_dict()
     animals = dict.get_key_list()
-
-    visit = visit_planner(animal_dict, animals)
-    visit.visit()
-
     poster = poster_creation(animal_dict, animals)
     animal_text = zoo_text(animal_dict, animals)
-    #poster.poster_date()
-    #poster.todays_poster()
+
+    terminal = terminal_mode(animal_dict, animals)
+    terminal.mode()
