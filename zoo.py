@@ -126,7 +126,7 @@ class dict_handling: #It would be possible to create an animal class and class i
     
     def list_to_dict(self):
         """
-        Converts list of lists with animal properties to a dictionary with key being the animals name
+        Converts list of lists with animal properties to a dictionary with key being the animals name, for information on the contents of the dict and their indexes see dict explanation file
         Return: Dictionary of animal data
         """
         
