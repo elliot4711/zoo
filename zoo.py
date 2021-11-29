@@ -14,7 +14,7 @@ from tkinter import messagebox
 from calendar import monthrange
 import tkinter
 
-GUI = False #Change to False to use program in terminal mode, note that terminal version of program is outdated. It can be used, but contains code repetition from the initial versions that was left only to allow the option of not using the GUI
+GUI = True #Change to False to use program in terminal mode, note that terminal version of program is outdated. It can be used, but contains code repetition from the initial versions that was left only to allow the option of not using the GUI
 
 class file_handling:
     """
@@ -636,6 +636,7 @@ def get_date():
     
     return date
 
+#Global variables were used for GUI functions
  
 if GUI:
     file = file_handling('zoo_animals.txt', "/")
