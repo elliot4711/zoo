@@ -8,13 +8,13 @@ from os import read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-from tkinter import Button as button # use this one if not on mac
-#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+#from tkinter import Button as button # use this one if not on mac
+from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
 import tkinter
 
-GUI = True #Change to False to use program in terminal mode, note that terminal version of program is outdated. It can be used, but contains code repetition from the initial versions that was left only to allow the option of not using the GUI
+GUI = False #Change to False to use program in terminal mode, note that terminal version of program is outdated. It can be used, but contains code repetition from the initial versions that was left only to allow the option of not using the GUI
 
 class file_handling:
     """
@@ -34,17 +34,18 @@ class file_handling:
 
     def read_file(self):
         """
-        Reads file and removes first line which only displays the format.
+        Reads file and removes first line which only displays the format and then turns lines in file into a list.
         Return: List of contents in file
         """
 
         list = []
 
-        file1 = open(self.file_name, 'r')
+        open_file = open(self.file_name, 'r')
         
-        lines = file1.readlines()
+        lines = open_file.readlines()
         for line in lines: 
             list.append(line.strip())
+        
         list.pop(0)
         
         return list
@@ -60,6 +61,7 @@ class file_handling:
         split_list = []
         for i in range(len(list)):
             split_list.append((list[i].split(self.delimiter)))
+        
         return split_list
 
 
@@ -244,10 +246,13 @@ class animal_checks:
 
         time = range(self.time[0], self.time[1]) 
         feeding_time = self.dict[animal][3]
+
         if feeding_time == "-":
             return False
+        
         elif feeding_time in time: 
             return True
+        
         else:
             return False
 
@@ -320,6 +325,7 @@ class terminal_mode:
             
                 else:
                     raise Exception
+            
             except:
                 print("Please enter a correct input either today or other")
 
@@ -340,11 +346,15 @@ class terminal_mode:
             check = animal_checks(self.dict, time, date) 
             print("The zoo is open")
             print("During your visit you will see:")
+            
             for animal in self.animals:
+                
                 if check.animal_awake(animal) and check.animal_not_hibernating(animal) and check.animal_feeding(animal):
                     print(f"{animal} *** will be fed at {self.dict[animal][3]} ***")
+                
                 elif check.animal_awake(animal) and check.animal_not_hibernating(animal):
                     print(f"{animal}")
+                
                 else:
                     pass
 
@@ -374,8 +384,10 @@ class poster_creation:
         # dd/mm/YY
         date = today.strftime("%d/%m")
         date = date.split("/")
+        
         for i in range(len(date)):
             date[i] = int(date[i])
+        
         poster_creation.create_poster(self, date)
     
 
@@ -432,9 +444,12 @@ class zoo_text:
         
         text = (f"Welcome to the Stockholm zoo!\nAt the zoo today {date_text} you can see\n")
         check = animal_checks(self.dict, [0, 24], date) 
+        
         for animal in self.animals:
+            
             if check.animal_not_hibernating(animal):
                 text += (f"{animal} *** will be fed at {self.dict[animal][3]} ***\n")
+            
             else: 
                 pass
         
@@ -460,8 +475,8 @@ class click:
         Changes text for moving 1 day forward in schedule
         """
 
-        date = click.get_next_date_positive()
-        print(self.date)
+        click.get_next_date_positive()
+        
         lbl.configure(text = animal_text.get_text(self.date))
     
 
@@ -470,8 +485,8 @@ class click:
         Changes text for moving 1 day backwards in schedule
         """
 
-        date = click.get_next_date_negative()
-        print(self.date)
+        click.get_next_date_negative()
+
         lbl.configure(text = animal_text.get_text(self.date))
     
 
@@ -489,12 +504,15 @@ class click:
             day = day + 1
             date_list.append(day)
             date_list.append(month)
+        
         else:
+            
             if month == 12:
                 month = 1
                 day = 1
                 date_list.append(day)
                 date_list.append(month)
+            
             else:
                 month = month + 1
                 day = 1
@@ -513,16 +531,20 @@ class click:
         month = self.date[1]
         days_in_month = monthrange(2021, month) # gives format [0, 30] for 30 days
         date_list = []
+        
         if day in range(2, days_in_month[1] + 1):
             day = day - 1
             date_list.append(day)
             date_list.append(month)
+
         else:
+            
             if month == 1:
                 month = 12
                 day = 31
                 date_list.append(day)
                 date_list.append(month)
+            
             else:
                 month = month -1
                 day = monthrange(2021, month)[1]
@@ -538,13 +560,16 @@ class click:
         """
 
         date_entered = entry.get()
+        
         try:
             date_entered = date_entered.split("/")
                 
             for i in range(2):
                 date_entered[i] = int(date_entered[i])
+            
             lbl.configure(text = animal_text.get_text(date_entered))
             self.date = date_entered
+        
         except:
             tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
 
@@ -561,7 +586,7 @@ class click:
         Creates fun popup about the KTH student
         """
 
-        tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it's diet consists of almost purely of reheated food, to the point where the student will sometimes refuse to consume fresh food, opting to let the food cool down before reheating it again in a device referred to as a microwave. The student spends most of the time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with causion.")
+        tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it spends most of its time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with caution.")
 
 
 def get_input_list(question, delimiter):
@@ -605,8 +630,10 @@ def get_date():
     today = datetime.today()
     date = today.strftime("%d/%m")
     date = date.split("/")
+    
     for i in range(len(date)):
         date[i] = int(date[i])
+    
     return date
 
  
@@ -617,7 +644,6 @@ if GUI:
     dict = dict_handling(list)
     animal_dict = dict.list_to_dict()
     animals = dict.get_key_list()
-
 
     poster = poster_creation(animal_dict, animals)
     animal_text = zoo_text(animal_dict, animals)
@@ -661,6 +687,7 @@ else:
     dict = dict_handling(list)
     animal_dict = dict.list_to_dict()
     animals = dict.get_key_list()
+    
     poster = poster_creation(animal_dict, animals)
     animal_text = zoo_text(animal_dict, animals)
 
