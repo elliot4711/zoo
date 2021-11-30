@@ -8,8 +8,8 @@ from os import read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-#from tkinter import Button as button # use this one if not on mac
-from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+from tkinter import Button as button # use this one if not on mac
+#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
 import tkinter
@@ -561,17 +561,22 @@ class click:
 
         date_entered = entry.get()
         
-        try:
-            date_entered = date_entered.split("/")
-                
-            for i in range(2):
-                date_entered[i] = int(date_entered[i])
-            
-            lbl.configure(text = animal_text.get_text(date_entered))
-            self.date = date_entered
+        if date_entered == "execute order 66":
+            tkinter.messagebox.showerror(title="Order 66", message="It will be done my lord!")
+            window.destroy()
         
-        except:
-            tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
+        else:
+            try:
+                date_entered = date_entered.split("/")
+                    
+                for i in range(2):
+                    date_entered[i] = int(date_entered[i])
+                
+                lbl.configure(text = animal_text.get_text(date_entered))
+                self.date = date_entered
+            
+            except:
+                tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using numbers in the format day/month, ex 6/7")
 
 
     def gui_poster(self):
@@ -636,61 +641,62 @@ def get_date():
     
     return date
 
-#Global variables were used for GUI functions
+if __name__ == '__main__':
+    #Global variables were used for GUI functions
  
-if GUI:
-    file = file_handling('zoo_animals.txt', "/")
-    list = file.get_list()
+    if GUI:
+        file = file_handling('zoo_animals.txt', "/")
+        list = file.get_list()
 
-    dict = dict_handling(list)
-    animal_dict = dict.list_to_dict()
-    animals = dict.get_key_list()
+        dict = dict_handling(list)
+        animal_dict = dict.list_to_dict()
+        animals = dict.get_key_list()
 
-    poster = poster_creation(animal_dict, animals)
-    animal_text = zoo_text(animal_dict, animals)
+        poster = poster_creation(animal_dict, animals)
+        animal_text = zoo_text(animal_dict, animals)
 
-    window = Tk()
-    window.title("Zoo calender")
-    lbl = Label(window, text = animal_text.get_text(get_date()))
-    lbl.grid(column=1, row=0)
-    window.geometry('600x600')
+        window = Tk()
+        window.title("Zoo calender")
+        lbl = Label(window, text = animal_text.get_text(get_date()))
+        lbl.grid(column=1, row=0)
+        window.geometry('500x600')
 
-    click = click(get_date())
+        click = click(get_date())
 
-    btn = button(window, text="--->", bg="blue", fg="white", command=click.clicked_positive)
-    btn2 = button(window, text="<---", bg="blue", fg="white", command=click.clicked_negative)
-    btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
-    btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=click.kth_popup)
-    btn5 = button(window, text="Create poster for this day", bg="blue", fg="white", command=click.gui_poster)
+        btn = button(window, text="Next day", bg="blue", fg="white", command=click.clicked_positive)
+        btn2 = button(window, text="Previous day", bg="blue", fg="white", command=click.clicked_negative)
+        btn3 = button(window, text="Show schedule for date", bg="blue", fg="white", command=click.show_date_entry)
+        btn4 = button(window, text="See information about our newest animal, the KTH student", bg="blue", fg="white", command=click.kth_popup)
+        btn5 = button(window, text="Create poster for this day", bg="blue", fg="white", command=click.gui_poster)
 
-    btn.grid(column=2, row=0)
-    btn2.grid(column=0, row=0)
-    btn3.grid(column=1, row=2)
-    btn4.grid(column=1, row=4)
-    btn5.grid(column=1, row=3)
+        btn.grid(column=2, row=0)
+        btn2.grid(column=0, row=0)
+        btn3.grid(column=1, row=2)
+        btn4.grid(column=1, row=4)
+        btn5.grid(column=1, row=3)
 
-    entry = Entry(window)
-    entry.grid(column=1, row=1)
+        entry = Entry(window)
+        entry.grid(column=1, row=1)
 
-    canv = Canvas(window, width=313, height=313, bg='white')
-    canv.grid(row=5, column=1)
+        canv = Canvas(window, width=313, height=313, bg='white')
+        canv.grid(row=5, column=1)
 
-    img = PhotoImage(file="welcome-the-the-zoo-background.gif")
-    img = img.subsample(2)
-    canv.create_image(313/2,313/2, image=img)
+        img = PhotoImage(file="welcome-the-the-zoo-background.gif")
+        img = img.subsample(2)
+        canv.create_image(313/2,313/2, image=img)
 
-    window.mainloop()
-    
-else:
-    file = file_handling('zoo_animals.txt', "/")
-    list = file.get_list()
+        window.mainloop()
+        
+    else:
+        file = file_handling('zoo_animals.txt', "/")
+        list = file.get_list()
 
-    dict = dict_handling(list)
-    animal_dict = dict.list_to_dict()
-    animals = dict.get_key_list()
-    
-    poster = poster_creation(animal_dict, animals)
-    animal_text = zoo_text(animal_dict, animals)
+        dict = dict_handling(list)
+        animal_dict = dict.list_to_dict()
+        animals = dict.get_key_list()
+        
+        poster = poster_creation(animal_dict, animals)
+        animal_text = zoo_text(animal_dict, animals)
 
-    terminal = terminal_mode(animal_dict, animals)
-    terminal.mode()
+        terminal = terminal_mode(animal_dict, animals)
+        terminal.mode()
