@@ -16,7 +16,7 @@ import tkinter
 
 GUI = True #Change to False to use program in terminal mode, note that terminal version of program is outdated. It can be used, but contains code repetition from the initial versions that was left only to allow the option of not using the GUI
 
-class file_handling:
+class FileHandling:
     """
     Handles reading and formating info from files
     """
@@ -111,7 +111,7 @@ class file_handling:
         return self.animals_list
 
 
-class dict_handling: #It would be possible to create an animal class and class instances for each animal, but this did not simplify the code much as it still required things like animal_list[i].get_sleep_time() instead of just dict[animal][3]
+class DictHandling: #It would be possible to create an animal class and class instances for each animal, but this did not simplify the code much as it still required things like animal_list[i].get_sleep_time() instead of just dict[animal][3]
     """
     Handles turning lists of file info into dictionary and giving keys of said dictionary
     """
@@ -149,7 +149,7 @@ class dict_handling: #It would be possible to create an animal class and class i
         return [*animal_dict]
 
 
-class animal_checks:
+class AnimalChecks:
     """
     Carries out different checks for the state of the animals, always returns True or False
     """
@@ -257,7 +257,7 @@ class animal_checks:
             return False
 
 
-class terminal_mode:
+class TerminalMode:
     """
     Handles a visit at the zoo and printing out schedules 
     """
@@ -290,12 +290,12 @@ class terminal_mode:
                 if answer == "v":
                     wrong_input = False
                     print("You have selected visitor mode")
-                    terminal_mode.visitor(self)
+                    TerminalMode.visitor(self)
                 
                 elif answer == "e":
                     wrong_input = False
                     print("You have chosen employee mode")
-                    terminal_mode.employee(self)
+                    TerminalMode.employee(self)
             
             except:
                 print("Please enter a correct input either v or e")
@@ -343,7 +343,7 @@ class terminal_mode:
             print("Sorry, the zoo is closed at this time")
         
         else:
-            check = animal_checks(self.dict, time, date) 
+            check = AnimalChecks(self.dict, time, date) 
             print("The zoo is open")
             print("During your visit you will see:")
             
@@ -359,7 +359,7 @@ class terminal_mode:
                     pass
 
 
-class poster_creation:
+class PosterCreation:
     """
     Handles creating posters with schedule for zoo
     """
@@ -388,7 +388,7 @@ class poster_creation:
         for i in range(len(date)):
             date[i] = int(date[i])
         
-        poster_creation.create_poster(self, date)
+        PosterCreation.create_poster(self, date)
     
 
     def poster_date(self):
@@ -398,7 +398,7 @@ class poster_creation:
 
         date = get_input_list("For what date would you like to create a poster? ", "/")
 
-        poster_creation.create_poster(self, date)
+        PosterCreation.create_poster(self, date)
     
 
     def create_poster(self, date):
@@ -417,7 +417,7 @@ class poster_creation:
         f.close
 
 
-class zoo_text:
+class ZooText:
     """
     Handles creating a text with all animals that can be seen for GUI
     """
@@ -443,7 +443,7 @@ class zoo_text:
         date_text = str(date[0]) + "-" + str(date[1])
         
         text = (f"Welcome to the Stockholm zoo!\nAt the zoo today {date_text} you can see\n")
-        check = animal_checks(self.dict, [0, 24], date) 
+        check = AnimalChecks(self.dict, [0, 24], date) 
         
         for animal in self.animals:
             
@@ -455,7 +455,7 @@ class zoo_text:
         
         return text
 
-class click:
+class Click:
     """
     Handles button clicks in GUI
     """
@@ -648,15 +648,15 @@ if __name__ == '__main__':
     #Global variables were used for GUI functions
  
     if GUI:
-        file = file_handling('zoo_animals.txt', "/")
+        file = FileHandling('zoo_animals.txt', "/")
         list = file.get_list()
 
-        dict = dict_handling(list)
+        dict = DictHandling(list)
         animal_dict = dict.list_to_dict()
         animals = dict.get_key_list()
 
-        poster = poster_creation(animal_dict, animals)
-        animal_text = zoo_text(animal_dict, animals)
+        poster = PosterCreation(animal_dict, animals)
+        animal_text = ZooText(animal_dict, animals)
 
         window = Tk()
         window.title("Zoo calender")
@@ -664,7 +664,7 @@ if __name__ == '__main__':
         lbl.grid(column=1, row=0)
         window.geometry('500x600')
 
-        click = click(get_date())
+        click = Click(get_date())
 
         btn = button(window, text="Next day", bg="blue", fg="white", command=click.clicked_positive)
         btn2 = button(window, text="Previous day", bg="blue", fg="white", command=click.clicked_negative)
@@ -691,15 +691,15 @@ if __name__ == '__main__':
         window.mainloop()
         
     else:
-        file = file_handling('zoo_animals.txt', "/")
+        file = FileHandling('zoo_animals.txt', "/")
         list = file.get_list()
 
-        dict = dict_handling(list)
+        dict = DictHandling(list)
         animal_dict = dict.list_to_dict()
         animals = dict.get_key_list()
         
-        poster = poster_creation(animal_dict, animals)
-        animal_text = zoo_text(animal_dict, animals)
+        poster = PosterCreation(animal_dict, animals)
+        animal_text = ZooText(animal_dict, animals)
 
-        terminal = terminal_mode(animal_dict, animals)
+        terminal = TerminalMode(animal_dict, animals)
         terminal.mode()
