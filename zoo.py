@@ -493,6 +493,7 @@ class click:
     def get_next_date_positive(self):
         """
         Decides next date efter present date, handles overflow into next year
+        Changes attribute date
         """
 
         day = self.date[0]
@@ -525,6 +526,7 @@ class click:
     def get_next_date_negative(self):
         """
         Decides date before present date, handles overflow into last year
+        Changes attribute date
         """
 
         day = self.date[0]
@@ -557,6 +559,7 @@ class click:
     def show_date_entry(self):
         """
         Changes text to show schedule for specific input date
+        Changes attribute date
         """
 
         date_entered = entry.get()
