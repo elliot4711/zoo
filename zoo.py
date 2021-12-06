@@ -4,12 +4,11 @@ A program to guide zoo visitors
 Written by Elliot Stjernqvist
 """
 
-from os import EX_CANTCREAT, execlp, read
 from pathlib import Path
 from datetime import date, datetime
 from tkinter import *
-#from tkinter import Button as button # use this one if not on mac
-from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
+from tkinter import Button as button # use this one if not on mac
+#from tkmacosx import Button as button # use this for mac as tkinter buttons do not work properly on latest mac OSX
 from tkinter import messagebox
 from calendar import monthrange
 import tkinter
@@ -349,9 +348,9 @@ class TerminalMode:
         Handles a visit to the zoo and prints out what animals will be seen at the zoo during for a time and date
         """
 
-        date = get_time_input_list("What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
+        date = get_datetime_input_list("date", "What date would you like to visit the Stockholm zoo? Please enter the date in the format d/m using numbers ex. 6/8 ", "/")
         print("The zoo is open from 06-22")
-        time = get_time_input_list("What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
+        time = get_datetime_input_list("time", "What time would you like to enter and leave the zoo? Please enter the time using numbers and full hours, ex. 12-16 ", "-")
 
         if time[0] > 22 or time[0] < 6:
             print("Sorry, the zoo is closed at this time")
@@ -409,7 +408,7 @@ class PosterCreation:
         Asks user which date they would like to create a poster for and creates poster for that date
         """
 
-        date = get_time_input_list("For what date would you like to create a poster? ", "/")
+        date = get_datetime_input_list("date", "For what date would you like to create a poster? ", "/")
 
         PosterCreation.create_poster(self, date)
     
@@ -584,22 +583,10 @@ class Click:
         else:
             try:
                 date_entered = date_entered.split("/")
-                if len(date_entered) != 2:
-                    raise Exception
-                
-                else:
+                date_entered = check_correct_datetime_format("date", date_entered)
                     
-                    for i in range(2):
-                        date_entered[i] = int(date_entered[i])
-                        
-                        if date_entered[i] < 1:
-                            raise Exception
-                        
-                        else:
-                            pass
-                    
-                    lbl.configure(text = animal_text.get_text(date_entered))
-                    self.date = date_entered
+                lbl.configure(text = animal_text.get_text(date_entered))
+                self.date = date_entered
             
             except:
                 tkinter.messagebox.showerror(title="Invalid entry", message="You must enter your date using positive numbers in the format day/month, ex 6/7")
@@ -622,10 +609,13 @@ class Click:
         tkinter.messagebox.showinfo(title="Info", message="The KTH student is a curious animal, it spends most of its time staring at a device referred to as a computer, and swearing at math problems or code errors usually made due to it's own stupidity. Due to early morning lessons and a characteristically bad sleep schedule, the student often has to rely on caffeine to stay awake. Due to this, KTH students have adapted to survive high doses of caffeine that would be considered lethal to most ordinary humans. They are easily agitated, so approach with caution.")
 
 
-def get_time_input_list(question, delimiter):
+def get_datetime_input_list(format, question, delimiter):
     """
     Takes input from user for certain frames of time, handles wrong inputs
-    Arguments: question: The question for the user to answer, delimiter: Where to split answer, for example 6-18 should be split at -
+    Arguments: 
+    format: if function should shoudl get input in a date or time format
+    question: The question for the user to answer 
+    delimiter: Where to split answer, for example 6-18 should be split at "-"
     Return: List with answer split
     """
 
@@ -638,25 +628,66 @@ def get_time_input_list(question, delimiter):
 
             answer = input(question)
             answer = answer.split(delimiter)
-            
-            if len(answer) != 2:
-                raise Exception
-            
-            else: 
-
-                for i in range(2):
-                    answer[i] = int(answer[i])
-
-                if answer[0] <= 0 or answer[1] <= 0: 
-                    print("Your input is incorrect, please try again")
-                    
-                else: 
-                    incorrect_input = False
+            answer = check_correct_datetime_format(format, answer)
+            incorrect_input = False
             
         except:
             print("Your input is incorrect, please try again")
             
     return answer
+
+def check_correct_datetime_format(format, raw_input):
+    """
+    Checks if input is correct with no illegal numbers for example month 13 or day 32, raises exceptions if wrong input is encountered
+    Arguments: format: if function should check for correct date or time format, raw_input: input to check for correct format
+    Return: Input in correct format
+    """
+    
+    
+    if format == "date":
+        if len(raw_input) != 2:
+            raise Exception
+        
+        else:
+            
+            for i in range(2):
+                raw_input[i] = int(raw_input[i])
+                
+                if raw_input[i] < 1:
+                    raise Exception
+                
+                else:
+                    pass
+        
+        days_in_month = monthrange(2021, raw_input[1]) # gives format [0, 30] for 30 days
+        date_list = []
+         
+        if raw_input[1] > 12:
+            raise Exception
+
+        elif raw_input[0] not in range(1, days_in_month[1]+1):
+            raise Exception
+
+        else:
+            return raw_input 
+    
+    elif format == "time":
+        
+        if len(raw_input) != 2:
+            raise Exception
+        
+        else:
+            
+            for i in range(2):
+                raw_input[i] = int(raw_input[i])
+                
+                if raw_input[i] < 1 or raw_input[i] > 24:
+                    raise Exception
+                
+                else:
+                    pass
+            
+            return raw_input
 
 
 def get_date():
