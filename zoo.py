@@ -38,80 +38,74 @@ class FileHandling:
     def read_file(self):
         """
         Reads file and removes first line which only displays the format and then turns lines in file into a list.
-        Return: List of contents in file
+        Creates self.list for storing animal info
         """
 
-        list = []
+        self.list = []
 
         open_file = open(self.file_name, 'r')
         
         lines = open_file.readlines()
         for line in lines: 
-            list.append(line.strip())
+            self.list.append(line.strip())
         
-        list.pop(0)
-        
-        return list
+        self.list.pop(0)    
         
 
-    def format_list(self, list):
+    def format_list(self):
         """
         Formats list by splitting it into multiple lists one for each animal
         Argument: List to be formated
-        Return: Formated list of lists
+        Updates self.list
         """
 
         split_list = []
-        for i in range(len(list)):
-            split_list.append((list[i].split(self.delimiter)))
+        for i in range(len(self.list)):
+            split_list.append((self.list[i].split(self.delimiter)))
         
-        return split_list
+        self.list = split_list
 
 
-    def fix_blankspace(self, list):
+    def fix_blankspace(self):
         """
         Removes the blankspace around every object in the list
         Argument: List to be fixed
-        Return: Fixed list
+        Updates self.list
         """
         
-        for i in range(len(list)):
-            for j in range(len(list[i])):
-                list[i][j] = list[i][j].strip()
+        for i in range(len(self.list)):
+            for j in range(len(self.list[i])):
+                self.list[i][j] = self.list[i][j].strip()
         
-        return list
 
-
-    def fix_type(self, list):
+    def fix_type(self):
         """
         Converts all objects to the correct types and splits up objects representing a space of time for example 13-16
         Argument: List to be fixed
-        Return: Fixed list
+        Updates self.list
         """
         
-        for i in range(len(list)):
-            list[i][3] = int(list[i][3])
-            time = list[i][2].split("-")
-            list[i].pop(2)
+        for i in range(len(self.list)):
+            self.list[i][3] = int(self.list[i][3])
+            time = self.list[i][2].split("-")
+            self.list[i].pop(2)
             
-            list[i].insert(2, int(time[0]))
-            list[i].insert(3, int(time[1]))
-        
-        return list
+            self.list[i].insert(2, int(time[0]))
+            self.list[i].insert(3, int(time[1]))
 
 
     def get_list(self):
         """
         Carries out all methods in order to turn file contents into list
-        Return: List of animal info
+        Updates self.list
         """
 
-        self.animals_list = file.read_file()
-        self.animals_list = file.format_list(self.animals_list)
-        self.animals_list = file.fix_blankspace(self.animals_list)
-        self.animals_list = file.fix_type(self.animals_list)
+        file.read_file()
+        file.format_list()
+        file.fix_blankspace()
+        file.fix_type()
         
-        return self.animals_list
+        return self.list
 
 
 class DictHandling:
@@ -361,7 +355,7 @@ class TerminalMode:
             print("During your visit you will see:")
             
             for animal in self.animals:
-                
+
                 if check.animal_awake(animal) and check.animal_not_hibernating(animal) and check.animal_feeding(animal):
                     print(f"{animal} *** will be fed at {self.dict[animal][3]} ***")
                 
